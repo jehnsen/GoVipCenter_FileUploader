@@ -124,11 +124,10 @@ namespace TestMakerApp
                 var dbContext = serviceScope.ServiceProvider.GetService<ApplicationDBContext>();
                 var roleManager = serviceScope.ServiceProvider.GetService<RoleManager<IdentityRole>>();
                 var userManager = serviceScope.ServiceProvider.GetService<UserManager<ApplicationUser>>();
-                //// create db if doesn't exist yet
-                //dbContext.Database.Migrate();
-                //DbSeeder.Seed(dbContext, roleManager, userManager);
+                
+                DbSeeder.Seed(dbContext, roleManager, userManager);
             }
-
+            
         }
     }
 }

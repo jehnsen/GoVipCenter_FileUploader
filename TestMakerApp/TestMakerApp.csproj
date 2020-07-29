@@ -6,6 +6,7 @@
     <TypeScriptToolsVersion>Latest</TypeScriptToolsVersion>
     <IsPackable>false</IsPackable>
     <PublishWithAspNetCoreTargetManifest>false</PublishWithAspNetCoreTargetManifest>
+    <UserSecretsId>f971ecdb-0e9f-4be1-8f2e-f5a0d5bd4021</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
