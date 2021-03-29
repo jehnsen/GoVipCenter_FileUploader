@@ -11,18 +11,26 @@ using GoVip_FileUploader.Data.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
+using System.IO;
+using Microsoft.AspNetCore.Http;
 
 namespace GoVip_FileUploader.Controllers
 {
     public class ItemController : BaseApiController
     {
+        public static IHostingEnvironment _environment;
         public ItemController(
             ApplicationDBContext context,
             RoleManager<IdentityRole> roleManager,
             UserManager<ApplicationUser> userManager,
-            IConfiguration configuration
+            IConfiguration configuration,
+            IHostingEnvironment environment
             )
-            : base(context, roleManager, userManager, configuration) { }
+            : base(context, roleManager, userManager, configuration)
+        { ;
+            _environment = environment;
+        }
 
         // GET: api/item
         [HttpGet]
@@ -52,58 +60,83 @@ namespace GoVip_FileUploader.Controllers
         //adds new item from the database
         [HttpPost]
         [Authorize]
-        public IActionResult Post([FromBody] ItemViewModel model)
+        public async Task<IActionResult> Post([FromForm] ItemViewModel model)
         {
-            //return 500 if payload is invalid
-            if (model == null) return new StatusCodeResult(500);
-            // validate user input
-            if (model.UploadedBy == null) return BadRequest("UploadedBy is required!");
-            // check if item already exist in the database
-            var existingItem = DbContext.Items.Where(i => i.Name == model.Name).FirstOrDefault();
-
-            if (existingItem != null) return BadRequest("Item already exist!");
-
-            //handle insert (w/o object mapping)
-            var item = model.Adapt<Item>();
-
-            //properties taken from the request
-            item.Name = model.Name;
-            item.Description = model.Description;
-            item.ImgUrl = model.ImgUrl;
-
-            // properties set from server-side
-            item.DateTimeCreated = DateTime.Now;
-            item.DateTimeUpdated = item.DateTimeCreated;
-
-            //set user id 
-            var currentUser = DbContext.Users.Where(u => u.Id == model.UploadedBy).FirstOrDefault();
-            if (currentUser == null)
+            try
             {
-                return NotFound(new
+                if(model.File == null) return BadRequest("File should not be empty!");
+
+                string path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/files", model.File.FileName);
+
+                using (Stream stream = new FileStream(path, FileMode.Create))
                 {
-                    Error = String.Format("User ID {0} not found!", model.Id)
-                });
+                    await model.File.CopyToAsync(stream);
+                }
+
+                //return 500 if payload is invalid
+                if (model == null) return new StatusCodeResult(500);
+                // validate user input
+                if (model.UploadedBy == null) return BadRequest("UploadedBy is required!");
+                // check if item already exist in the database
+                var existingItem = DbContext.Items.Where(i => i.Name == model.Name).FirstOrDefault();
+
+                if (existingItem != null) return BadRequest("Item already exist!");
+
+                //handle insert (w/o object mapping)
+                var item = model.Adapt<Item>();
+
+                //properties taken from the request
+                item.Name = model.Name;
+                item.Description = model.Description;
+                item.Filepath = path;
+
+                // properties set from server-side
+                item.DateTimeCreated = DateTime.Now;
+                item.DateTimeUpdated = item.DateTimeCreated;
+
+                //set user id 
+                var currentUser = DbContext.Users.Where(u => u.Id == model.UploadedBy).FirstOrDefault();
+                if (currentUser == null)
+                {
+                    return NotFound(new
+                    {
+                        Error = String.Format("User ID {0} not found!", model.Id)
+                    });
+                }
+                item.UploadedBy = currentUser.Id;
+                item.UpdatedBy = currentUser.Id;
+
+                // add the new item
+                DbContext.Items.Add(item);
+                // persist changes to database
+                DbContext.SaveChanges();
+
+                // return newly created item to client
+                //return new JsonResult(item.Adapt<ItemViewModel>(), JsonSettings);
+                return StatusCode(StatusCodes.Status201Created);
             }
-            item.UploadedBy = currentUser.Id;
-            item.UpdatedBy = currentUser.Id;
+            catch
+            {
+                return BadRequest();
+            }
 
-            // add the new item
-            DbContext.Items.Add(item);
-            // persist changes to database
-            DbContext.SaveChanges();
-
-            // return newly created item to client
-            return new JsonResult(item.Adapt<ItemViewModel>(), JsonSettings);
         }
 
         // PATCH: api/item
         [HttpPatch]
         [Authorize]
-        public IActionResult Put([FromBody] ItemViewModel model)
+        public async Task<IActionResult> Put([FromForm] ItemViewModel model)
         {
             if (model == null) return new StatusCodeResult(500);
             // validate user input
             if (model.UpdatedBy == null) return BadRequest("UpdatedBy is required!");
+
+            string path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/files", model.File.FileName);
+
+            using (Stream stream = new FileStream(path, FileMode.Create))
+            {
+                await model.File.CopyToAsync(stream);
+            }
 
             var item = DbContext.Items.Where(r => r.Id == model.Id).FirstOrDefault();
 
@@ -117,7 +150,7 @@ namespace GoVip_FileUploader.Controllers
 
             item.Name = model.Name;
             item.Description = model.Description;
-            item.ImgUrl = model.ImgUrl;
+            item.Filepath = path;
             item.UpdatedBy = DbContext.Users.Where(u => u.Id == model.UpdatedBy).FirstOrDefault().Id;
             item.DateTimeCreated = DateTime.Now;
             item.DateTimeUpdated = item.DateTimeCreated;

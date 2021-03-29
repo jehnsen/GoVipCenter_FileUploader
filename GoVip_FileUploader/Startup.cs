@@ -129,7 +129,7 @@ namespace GoVip_FileUploader
                 var roleManager = serviceScope.ServiceProvider.GetService<RoleManager<IdentityRole>>();
                 var userManager = serviceScope.ServiceProvider.GetService<UserManager<ApplicationUser>>();
 
-                DbSeeder.Seed(dbContext, roleManager, userManager);
+                //DbSeeder.Seed(dbContext, roleManager, userManager);
             }
             
         }

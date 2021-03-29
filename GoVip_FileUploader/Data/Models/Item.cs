@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
@@ -20,8 +21,7 @@ namespace GoVip_FileUploader.Data.Models
         [Required]
         public string Name { get; set; }
         public string Description { get; set; }
-        [Required]
-        public string ImgUrl { get; set; }
+        public string Filepath { get; set; }
         [Required]
         public string UploadedBy { get; set; }
         [Required]

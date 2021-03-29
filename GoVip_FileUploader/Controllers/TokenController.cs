@@ -187,10 +187,6 @@ namespace GoVip_FileUploader.Controllers
 
         public IActionResult FacebookSignIn()
         {
-            //appId: 543658282996904
-            //appSecret: 829e6b89b5ec984a68e0e7c286a65799
-            //displayName: Eugune
-
             return new JsonResult(new { facebook = "" });
         }
     }

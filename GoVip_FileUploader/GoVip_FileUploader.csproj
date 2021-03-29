@@ -25,7 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="StaticFiles\Images\" />
+    <Folder Include="wwwroot\files\" />
   </ItemGroup>
 
   <Target Name="DebugRunWebpack" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('wwwroot\dist') ">

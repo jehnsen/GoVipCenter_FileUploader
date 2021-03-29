@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 
 namespace GoVip_FileUploader.ViewModels
@@ -16,9 +17,8 @@ namespace GoVip_FileUploader.ViewModels
         public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        [DefaultValue(0)]
-        public string ImgUrl { get; set; }
-        [DefaultValue(0)]
+        public string Filepath { get; set; }
+        public IFormFile File { get; set; }
         public string UpdatedBy { get; set; }
         public string UploadedBy { get; set; }
         [JsonIgnore]
