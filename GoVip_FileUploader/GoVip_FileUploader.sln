@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30309.148
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GoVip_FileUploader", "TestMakerApp\GoVip_FileUploader.csproj", "{44D006F7-8324-4C31-9950-ACB3F84F6488}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GoVip_FileUploader", "GoVip_FileUploader.csproj", "{E3D16025-D386-4478-B99F-0A23FF4611F1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,15 +11,15 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{44D006F7-8324-4C31-9950-ACB3F84F6488}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{44D006F7-8324-4C31-9950-ACB3F84F6488}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{44D006F7-8324-4C31-9950-ACB3F84F6488}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{44D006F7-8324-4C31-9950-ACB3F84F6488}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E3D16025-D386-4478-B99F-0A23FF4611F1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E3D16025-D386-4478-B99F-0A23FF4611F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E3D16025-D386-4478-B99F-0A23FF4611F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E3D16025-D386-4478-B99F-0A23FF4611F1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {778407A7-EC9B-406F-9F09-5F872F041258}
+		SolutionGuid = {DEDB49DE-5992-4F2F-BE9A-BA17E3068EA5}
 	EndGlobalSection
 EndGlobal
